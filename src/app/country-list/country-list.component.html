@@ -1,0 +1,97 @@
+
+
+<ngx-spinner></ngx-spinner>
+<app-child-component [name]="name" [phone_number]="phone_number" [address]="address" [country]="country" [state]="state" [gender]="gender" [displayStyle]="displayStyle" (messageEvent)="receiveMessage($event)"  ></app-child-component>
+<div class="card" *ngIf="addUserMode">
+  <div class="card-body">
+     <h1>Add User Form</h1>
+     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+     <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" formControlName="name" [(ngModel)]="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"   placeholder="Enter name">
+        <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+           <div *ngIf="f.name.errors.required">Name is required</div>
+        </div>
+     </div>
+     <div class="form-group">
+        <label for="phone_number">Phone Number</label>
+        <input type="number" class="form-control" id="phone_number" formControlName="phone_number" [(ngModel)]="phone_number" [ngClass]="{ 'is-invalid': submitted && f.phone_number.errors }" placeholder="Phone Number">
+        <div *ngIf="submitted && f.phone_number.errors" class="invalid-feedback">
+           <div *ngIf="f.phone_number.errors.required">Phone number is required</div>
+        </div>
+     </div>
+     <div class="form-group">
+        <label for="address">Address</label>
+        <textarea class="form-control" id="address" formControlName="address" [(ngModel)]="address" [ngClass]="{ 'is-invalid': submitted && f.address.errors }" rows="3"></textarea>
+        <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
+           <div *ngIf="f.address.errors.required">Address is required</div>
+        </div>
+     </div>
+     <div class="form-group">
+        <label for="country">Country</label>
+        <select class="form-control" id="country" formControlName="country" [(ngModel)]="country" [ngClass]="{ 'is-invalid': submitted && f.country.errors }">
+           <option *ngFor="let country of uniqueCountryLists" value="{{country.alpha_two_code}}">{{country.country}}</option>
+        </select>
+        <div *ngIf="submitted && f.country.errors" class="invalid-feedback">
+           <div *ngIf="f.country.errors.required">Country is required</div>
+        </div>
+     </div>
+     <div class="form-group">
+        <label for="state">State</label>
+        <input type="text" class="form-control" id="state" formControlName="state" [(ngModel)]="state" [ngClass]="{ 'is-invalid': submitted && f.state.errors }" placeholder="State">
+        <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
+           <div *ngIf="f.state.errors.required">State is required</div>
+        </div>
+     </div>
+     <div class="form-group">
+        <label for="city">City</label>
+        <input type="text" class="form-control" id="city" formControlName="city" [(ngModel)]="city" [ngClass]="{ 'is-invalid': submitted && f.city.errors }" placeholder="City">
+        <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+           <div *ngIf="f.city.errors.required">City is required</div>
+        </div>
+     </div>
+     <fieldset class="form-group">
+        <div class="row">
+           <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+           <select formControlName="gender" [(ngModel)]="gender" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.gender.errors }">
+              <option value="">Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+           </select>
+           <div *ngIf="submitted && f.gender.errors" class="invalid-feedback">
+              <div *ngIf="f.gender.errors.required">Gender is required</div>
+           </div>
+        </div>
+     </fieldset>
+     <button type="submit" class="btn btn-primary">Submit</button>
+     <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
+     </form>
+  </div>
+</div>
+<h3  *ngIf="!addUserMode"> Country List</h3>
+<div class="input-group mb-3" *ngIf="!addUserMode">
+  <input type="text" class="form-control" placeholder="Enter country Name" [(ngModel)]="searchFilter"  aria-label="Username" aria-describedby="basic-addon1">
+</div>
+
+<table class="table" *ngIf="!addUserMode">
+  <thead class="thead-dark">
+     <tr>
+        <th scope="col" (click)="sorting(sort_by)">Name  
+           <i  *ngIf="sort_by=='asc'" class="fa fa-sort-up"></i> 
+           <i *ngIf="sort_by=='desc'" class="fa fa-sort-down"></i>
+        </th>
+        <th scope="col">Country</th>
+        <th scope="col">Action</th>
+     </tr>
+  </thead>
+  <tbody>
+     <tr *ngFor="let country of county_list | countryFilter: searchFilter">
+        <td>{{country.name}}</td>
+        <td>{{country.country}}</td>
+        <td><button type="button" (click)="addUser(country.alpha_two_code)" class="btn btn-success">Add User</button>
+        </td>
+     </tr>
+  </tbody>
+</table>
+
+
